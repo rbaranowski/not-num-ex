@@ -1,5 +1,2 @@
-*.tex
-*.pdf
-*.RData
 *.sh
 .Rhistory
