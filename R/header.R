@@ -20,5 +20,5 @@ comp.times.height <- 3.3
 seed <- 11111
 
 #***** Number of MC repetitions in the simulation study and the number of available cores
-mc <- 8
-n.cores <- 8
+mc <- 128
+n.cores <- 32

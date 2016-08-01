@@ -26,7 +26,7 @@ results <- list()
 k <- 1
 for(contrast.type in contrast.type.set)
   for(n in n.set)
-    for(j in 1:mc){
+    for(j in 1:comp.mc){
       results[[k]] <- computation.times(n, contrast.type, parallel = TRUE)
       k <- k+1
     }
@@ -44,7 +44,7 @@ results <- list()
 k <- 1
 for(contrast.type in contrast.type.set)
   for(M in M.set)
-    for(j in 1:mc){
+    for(j in 1:comp.mc){
       results[[k]] <- computation.times(n, contrast.type, parallel = TRUE, M=M)
       k <- k+1
     }
