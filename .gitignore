@@ -1,2 +1,4 @@
 *.sh
 .Rhistory
+.RData
+Rplots.pdf
