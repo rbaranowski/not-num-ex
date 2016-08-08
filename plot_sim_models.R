@@ -15,7 +15,7 @@ models <-
        model.mix, 
        model.quad)
 
-penalty <- "bic"
+penalty <- "sic"
 
 set.seed(seed)
 for(model in models){
@@ -28,7 +28,7 @@ for(model in models){
   
   
   w <- not(x, method = "not", contrast = model$cpt.type, rand.intervals = TRUE)
-  cpt <- features(w, penalty=penalty)$cpt[[1]]
+  cpt <- features(w, penalty=penalty)$cpt
   fit <- predict(w, cpt)
   
   x.plot.data <- data.frame(x=1:model$n, y = x)
@@ -76,7 +76,7 @@ for(model in models){
 #*** example with changes in mean and volatility
 x  <- sim.model(model.vol)
 w <- not(x, method = "not", contrast = "pcwsConstMeanVar", M=10000, rand.intervals = TRUE)
-cpt <- features(w, penalty=penalty)$cpt[[1]]
+cpt <- features(w, penalty=penalty)$cpt
 signal <- get.signal(model.vol)
 
 plot.data <- data.frame(time=1:model.vol$n,

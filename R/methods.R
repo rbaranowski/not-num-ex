@@ -19,7 +19,7 @@ sim.methods[["pcwsConstMean"]] <- list(
   not.sic=function(x){
     tic <- proc.time()
     object <- not(x, method = "not", contrast = "pcwsConstMean", parallel = FALSE)
-    cpts <- features(object, penalty = "sic")$cpt[[1]]
+    cpts <- features(object, penalty = "sic")$cpt
     toc <- proc.time()
     
     list(fit = predict(object, cpt=cpts), cpts=cpts, elapsed=(toc-tic)[3])
@@ -27,23 +27,7 @@ sim.methods[["pcwsConstMean"]] <- list(
   not.ht.sic=function(x){
     tic <- proc.time()
     object <- not(x, method = "not", contrast = "pcwsConstMeanHT", parallel = FALSE)
-    cpts <- features(object, penalty = "sic")$cpt[[1]]
-    toc <- proc.time()
-    
-    list(fit = predict(object, cpt=cpts), cpts=cpts, elapsed=(toc-tic)[3])
-  },
-  not.bic=function(x){
-    tic <- proc.time()
-    object <- not(x, method = "not", contrast = "pcwsConstMean", parallel = FALSE)
-    cpts <- features(object, penalty = "bic")$cpt[[1]]
-    toc <- proc.time()
-    
-    list(fit = predict(object, cpt=cpts), cpts=cpts, elapsed=(toc-tic)[3])
-  },
-  not.ht.bic=function(x){
-    tic <- proc.time()
-    object <- not(x, method = "not", contrast = "pcwsConstMeanHT", parallel = FALSE)
-    cpts <- features(object, penalty = "bic")$cpt[[1]]
+    cpts <- features(object, penalty = "sic")$cpt
     toc <- proc.time()
     
     list(fit = predict(object, cpt=cpts), cpts=cpts, elapsed=(toc-tic)[3])
@@ -164,10 +148,8 @@ sim.methods[["pcwsConstMean"]] <- list(
   }
  )
 
-sim.methods.names[["pcwsConstMean"]] <- c("NOT SIC",
-                                      "NOT SIC HT",
-                                      "NOT BIC",
-                                      "NOT BIC HT",
+sim.methods.names[["pcwsConstMean"]] <- c("NOT",
+                                      "NOT HT",
                                       "WBS",
                                       "PELT",
                                       "NP-PELT",
@@ -184,16 +166,7 @@ sim.methods[["pcwsConstMeanVar"]] <- list(
     
     tic <- proc.time()
     object <- not(x, method = "not", contrast = "pcwsConstMeanVar", parallel = FALSE)
-    cpts <- features(object, penalty = "sic")$cpt[[1]]
-    toc <- proc.time()
-    
-    list(fit = predict(object, cpt=cpts), cpts=cpts, elapsed=(toc-tic)[3])
-  },
-  not.bic = function(x){
-    
-    tic <- proc.time()
-    object <- not(x, method = "not", contrast = "pcwsConstMeanVar", parallel = FALSE)
-    cpts <- features(object, penalty = "bic")$cpt[[1]]
+    cpts <- features(object, penalty = "sic")$cpt
     toc <- proc.time()
     
     list(fit = predict(object, cpt=cpts), cpts=cpts, elapsed=(toc-tic)[3])
@@ -222,7 +195,7 @@ sim.methods[["pcwsConstMeanVar"]] <- list(
     #creating not like object to be able to use the predict function
     w <- list(x=x)
     class(w) <- "not"
-    w$contrast <- "pcwsConstMean"
+    w$contrast <- "pcwsConstMeanVar"
     
     list(fit = predict(w, cpt=cpts), cpts=cpts, elapsed=(toc-tic)[3])
   },
@@ -257,8 +230,7 @@ sim.methods[["pcwsConstMeanVar"]] <- list(
   
 )
 
-sim.methods.names[["pcwsConstMeanVar"]]<- c("NOT SIC",
-                                            "NOT BIC",
+sim.methods.names[["pcwsConstMeanVar"]]<- c("NOT",
                                             "PELT",
                                             "NP-PELT",
                                             "e-cp3o",
@@ -271,16 +243,7 @@ sim.methods[["pcwsLinContMean"]]  <- list(
     
     tic <- proc.time()
     object <- not(x, method = "not", contrast = "pcwsLinContMean", parallel = FALSE)
-    cpts <- features(object, penalty = "sic")$cpt[[1]]
-    toc <- proc.time()
-    
-    list(fit = predict(object, cpt=cpts), cpts=cpts, elapsed=(toc-tic)[3])
-  },
-  not.bic=function(x){
-    
-    tic <- proc.time()
-    object <- not(x, method = "not", contrast = "pcwsLinContMean", parallel = FALSE)
-    cpts <- features(object, penalty = "bic")$cpt[[1]]
+    cpts <- features(object, penalty = "sic")$cpt
     toc <- proc.time()
     
     list(fit = predict(object, cpt=cpts), cpts=cpts, elapsed=(toc-tic)[3])
@@ -313,8 +276,7 @@ sim.methods[["pcwsLinContMean"]]  <- list(
   }
 )
 
-sim.methods.names[["pcwsLinContMean"]] <- c("NOT SIC",
-                                            "NOT BIC",
+sim.methods.names[["pcwsLinContMean"]] <- c("NOT",
                                             "B\\&P",
                                             "TF")
 
@@ -324,16 +286,7 @@ sim.methods[["pcwsLinMean"]]  <- list(
     
     tic <- proc.time()
     object <- not(x, method = "not", contrast = "pcwsLinMean", parallel = FALSE)
-    cpts <- features(object, penalty="sic")$cpt[[1]]
-    toc <- proc.time()
-    
-    list(fit = predict(object, cpt=cpts), cpts=cpts, elapsed=(toc-tic)[3])
-  },
-  not.bic=function(x){
-    
-    tic <- proc.time()
-    object <- not(x, method = "not", contrast = "pcwsLinMean", parallel = FALSE)
-    cpts <- features(object, penalty="bic")$cpt[[1]]
+    cpts <- features(object, penalty="sic")$cpt
     toc <- proc.time()
     
     list(fit = predict(object, cpt=cpts), cpts=cpts, elapsed=(toc-tic)[3])
@@ -366,8 +319,7 @@ sim.methods[["pcwsLinMean"]]  <- list(
   }
 )
 
-sim.methods.names[["pcwsLinMean"]] <-  c("NOT SIC",
-                                         "NOT BIC",
+sim.methods.names[["pcwsLinMean"]] <-  c("NOT",
                                          "B\\&P",
                                          "TF")
 
@@ -377,16 +329,7 @@ sim.methods[["pcwsQuadMean"]]  <- list(
     
     tic <- proc.time()
     object <- not(x, method = "not", contrast = "pcwsQuadMean", parallel = FALSE)
-    cpts <- features(object, penalty = "sic")$cpt[[1]]
-    toc <- proc.time()
-    
-    list(fit = predict(object, cpt=cpts), cpts=cpts, elapsed=(toc-tic)[3])
-  },
-  not.bic=function(x){
-    
-    tic <- proc.time()
-    object <- not(x, method = "not", contrast = "pcwsQuadMean", parallel = FALSE)
-    cpts <- features(object, penalty="bic")$cpt[[1]]
+    cpts <- features(object, penalty = "sic")$cpt
     toc <- proc.time()
     
     list(fit = predict(object, cpt=cpts), cpts=cpts, elapsed=(toc-tic)[3])
@@ -420,7 +363,6 @@ sim.methods[["pcwsQuadMean"]]  <- list(
   }
 )
 
-sim.methods.names[["pcwsQuadMean"]] <-  c("NOT SIC",
-                                          "NOT BIC",
+sim.methods.names[["pcwsQuadMean"]] <-  c("NOT",
                                           "B\\&P",
                                           "TF")

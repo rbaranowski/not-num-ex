@@ -19,7 +19,8 @@ asses.fit <- function(x, model, fit, cpts, tol=0.025){
   
   cpts <- cpts[!is.na(cpts)]
   
-  mse <- mean((get.signal(model)-fit)^2)
+  if(model$cpt.type == "pcwsConstMeanVar")  mse <- mean((get.signal(model)[,1]-fit[,1])^2)
+  else mse <- mean((get.signal(model)-fit)^2)
   
   n <- length(x)
   n.cpts <- length(cpts)
@@ -135,7 +136,7 @@ get.signal <- function(model){
 
 sim.function <- function(model, mc, n.cores=8, sigma, noise, noise.fun, functions, functions.names){
   
-  cat(sprintf("Analysing model %s,  %s noise sigma=%d...\n", model$name, noise, sigma))
+  cat(sprintf("Analysing model %s,  %s noise sigma=%s...\n", model$name, noise, sigma))
   
   
   results <- do.call(rbind, mclapply(1:mc, function(x, sigma, noise.fun){
@@ -176,7 +177,7 @@ sim.function <- function(model, mc, n.cores=8, sigma, noise, noise.fun, function
   attr(results, "noise") <- noise 
   attr(results, "model") <- model
   
-  save(results, file=sprintf("results/%s_%s_sigma_%d.RData", model$name, noise, sigma))
+  save(results, file=sprintf("results/%s_%s_sigma_%f.RData", model$name, noise, sigma))
   
 }
 
@@ -229,6 +230,17 @@ phi <- function(x, s, e, b){
     
   }
   
+  res
+}
+
+psi <- function(x, s, e, b){
+  
+  l <- length(x)
+  res <- rep(0, l)
+  
+  res[(x>=s) & (x<=b)] <- rep(sqrt((e-b)/(l * (b-s+1))), b-s+1)
+  res[(x>=b+1) & (x<=e)] <- -rep(sqrt((b-s+1)/(l * (e-b))), e-b)
+
   res
 }
 
@@ -296,7 +308,7 @@ changepoints.tree.not <- function(contrasts, th) {
   
   set.seed(seed)
   contrasts <- contrasts[order(contrasts$length, sample(nrow(contrasts))), ]
-  print(contrasts)
+
   contrasts <- contrasts[contrasts$max.contrast > th, , drop=FALSE]
   
   changepoints.tree.not.rec(contrasts, NA)

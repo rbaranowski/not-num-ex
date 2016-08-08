@@ -1,7 +1,6 @@
 #######################################################################################
 ################ load required packages and source code  ##############################
 #######################################################################################
-require(Quandl)
 source("R/header.R")
 source("R/misc.R")
 
@@ -22,6 +21,8 @@ data.list <-list("Tower_Hamlets" = data.tower.hamlets,
                  "Newham" = data.newham,
                  "Hackney" = data.hackney)
 
+data.list[[j]][c(52,  96, 156, 172, 230)-1,]
+
 for(j in 1:3){
   
   x <- data.list[[j]][-1,2]
@@ -29,9 +30,11 @@ for(j in 1:3){
   set.seed(seed)
   
   #**** identify change-points with NOT SIC
-  w <- not(x, method="not", contrast = "pcwsConstMeanVar", M=50000)
-  w.cpt <- features(w, penalty = "sic")$cpt[[1]]
+  w <- not(x, method="not", contrast = "pcwsConstMeanVar")
+  w.cpt <- features(w, penalty = "sic")$cpt
   
+  
+
   #**** create data frame for plotting
   plot.data <- data.frame(time = as.Date(index(x)),
                           x = as.numeric(x),

@@ -21,7 +21,7 @@ e.cpt <- e$cpp
 #**** identify changepoints using not #
 set.seed(seed)
 system.time(w <- not(returns, contrast = "pcwsConstMeanVar", M=10000, method="not", parallel=FALSE, rand.intervals = TRUE))
-w.cpt <- features(w, q.max = 25, penalty="sic")$cpt[[1]]
+w.cpt <- features(w, q.max = 25, penalty="sic")$cpt
 
 #**** create plotting data
 plot.data <- data.frame(time = as.Date(index(x)),

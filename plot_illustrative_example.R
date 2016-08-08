@@ -4,7 +4,7 @@
 source("R/header.R")
 source("R/misc.R")
 ###### plots for the motivating example in the paper
-M <- 7
+
 n <- 1000
 sigma <- 0.05
 
@@ -14,11 +14,13 @@ signal[1:350] <- 1:350 / 350
 signal[350  + 1:300] <- 1
 signal[651:1000] <- 350:1 / 350
 
-set.seed(seed)
+intervals <- matrix(c(1,1000, 10, 245, 225, 450, 500, 750, 740, 950, 450, 550), ncol=2, byrow=TRUE)
+M <- nrow(intervals)
 
+set.seed(seed)
 x <- signal + sigma*rnorm(n)
-o.not <- not(x, contrast="pcwsLinContMean", method="not", M=M, parallel=FALSE, rand.intervals = FALSE)
-o.wbs <- not(x, contrast="pcwsLinContMean", method="max", M=M, parallel=FALSE, rand.intervals = FALSE)
+o.not <- not(x, contrast="pcwsLinContMean", method="not", parallel=FALSE, rand.intervals = FALSE, intervals=intervals)
+o.wbs <- not(x, contrast="pcwsLinContMean", method="max", parallel=FALSE, rand.intervals = FALSE, intervals=intervals)
 
 contrasts <- apply(o.not$contrasts[,1:2], 1, function(int){
   
@@ -34,12 +36,12 @@ colnames(contrasts) <- paste0("int", 1:M)
 plot.data <- cbind(data.frame(index=1:n,
                               x=x, 
                               signal=signal, 
-                              not.fitted = predict(o.not, cpt=features(o.not, method = "th", th = 1)$cpt[[1]]),
-                              wbs.fitted = predict(o.not, cpt=features(o.wbs, method = "th", th = 1)$cpt[[1]]),
+                              not.fitted = predict(o.not, cpt=features(o.not, method = "th", th = 0.5)$cpt),
+                              wbs.fitted = predict(o.not, cpt=features(o.wbs, method = "th", th = 1)$cpt),
                               as.data.frame(contrasts)))
 
 #***** plot with contrasts
-file.name <- "motivating_example_contrasts"
+file.name <- "illustrative_example_contrasts"
 
 pl <- ggplot(plot.data) +
   geom_line(aes(x=index, y=int1, color="standard"), linetype = 1, size=1)+
@@ -48,7 +50,6 @@ pl <- ggplot(plot.data) +
   geom_line(aes(x=index, y=int4, color="not"), linetype = 1, size=1)+
   geom_line(aes(x=index, y=int5, color="not"), linetype = 1, size=1)+
   geom_line(aes(x=index, y=int6, color="not"), linetype = 1, size=1)+
-  geom_line(aes(x=index, y=int7, color="not"), linetype = 1, size=1)+
   scale_color_manual(values=c("gray", "black"))+
   scale_y_sqrt()+
   theme_bw()+
@@ -65,7 +66,7 @@ print(pl)
 dev.off()
 
 #**** plot fitted signals
-file.name <- "motivating_example_fitted"
+file.name <- "illustrative_example_fitted"
 
 pl <- ggplot(plot.data) +
   geom_line(aes(x=index, y=x, color="data"), linetype = 1)+
@@ -89,7 +90,7 @@ dev.off()
 
 #**** plots for models with one changepoint
 
-w <- not(signal, contrast = "pcwsLinContMean", method="not", M=M, parallel=FALSE, rand.intervals = FALSE)
+w <- not(signal, contrast = "pcwsLinContMean", method="not", M=M, parallel=FALSE, rand.intervals = FALSE, intervals=intervals)
 
 plot.data <- cbind(data.frame(index=1:n,
                               signal=signal,
@@ -115,13 +116,13 @@ pl <- ggplot(plot.data) +
            y = Inf,
            vjust=2,
            hjust=1.1,
-           label = sprintf("$RSS=%.2f$", rss[1]))
+           label = sprintf("$\\mbox{Error}=%.1f$", rss[1]))
 
-pdf(file = paste("pdf/",file.name,".pdf", sep=""), width= 0.6*width, height= 0.6*width)
+pdf(file = paste("pdf/",file.name,".pdf", sep=""), width= 0.6*width, height= 0.4*width)
 print(pl)
 dev.off()
 
-tikz(file = paste("tikz/",file.name,".tex", sep=""), width= 0.6*width, height= 0.6*width)
+tikz(file = paste("tikz/",file.name,".tex", sep=""), width= 0.6*width, height= 0.4*width)
 print(pl)
 dev.off()
 
@@ -140,14 +141,14 @@ pl <- ggplot(plot.data) +
            y = Inf,
            vjust=2,
            hjust=1.1,
-           label = sprintf("$RSS=%.2f$", rss[2]))
+           label = sprintf("$\\mbox{Error}=%.1f$", rss[2]))
 
 
-pdf(file = paste("pdf/",file.name,".pdf", sep=""), width= 0.6*width, height= 0.6*width)
+pdf(file = paste("pdf/",file.name,".pdf", sep=""), width= 0.6*width, height= 0.4*width)
 print(pl)
 dev.off()
 
-tikz(file = paste("tikz/",file.name,".tex", sep=""), width= 0.6*width, height= 0.6*width)
+tikz(file = paste("tikz/",file.name,".tex", sep=""), width= 0.6*width, height= 0.4*width)
 print(pl)
 dev.off()
 
@@ -165,14 +166,14 @@ pl <- ggplot(plot.data) +
            y = Inf,
            vjust=2,
            hjust=1.1,
-           label = sprintf("$RSS=%.2f$", rss[3]))
+           label = sprintf("$\\mbox{Error}=%.1f$", rss[3]))
 
 
-pdf(file = paste("pdf/",file.name,".pdf", sep=""), width= 0.6*width, height= 0.6*width)
+pdf(file = paste("pdf/",file.name,".pdf", sep=""), width= 0.6*width, height= 0.4*width)
 print(pl)
 dev.off()
 
-tikz(file = paste("tikz/",file.name,".tex", sep=""), width= 0.6*width, height= 0.6*width)
+tikz(file = paste("tikz/",file.name,".tex", sep=""), width= 0.6*width, height= 0.4*width)
 print(pl)
 dev.off()
 
@@ -187,15 +188,20 @@ colnames(contrasts.table) <- c("$s$",
 contrasts.table[,5] <- round(contrasts.table[,5],2)
 
 contrasts.table.latex <- xtable(contrasts.table[ ,], 
-                                align = c("c", "c", "c", "c", "c", "c"),
-                                caption = "\\label{Table:motivating_example_contrasts} Intervals considered in Figure~\\ref{Fig:motivating_example_contrasts} and corresponding maxima of the contrast function  $\\cont{s}{e}{b}{\\Yb}$ given by \\eqref{Eq:contrast_kink} and the GLR statistic..")
+                                align = c("c", "c", "c", "c", "c", "c"))
 
-print(contrasts.table.latex, include.rownames = FALSE, file="tables/motivating_example_contrasts.tex", sanitize.colnames.function=identity)
+print(contrasts.table.latex, 
+      include.rownames = FALSE,
+      include.colnames = FALSE,
+      hline.after=c(),
+      only.contents = TRUE,
+      file="tables/illustrative_example_contrasts.tex", 
+      sanitize.colnames.function=identity)
 
 #**** plot segmentation tree -- plot last three segments
 n.path <- length(o.not$solution.path$th)
 
-for(i in 1:3){
+for(i in 1:4){
   
   segmentation.tree <- changepoints.tree.not(o.not$contrasts, o.not$solution.path$th[n.path-i+1])
   G <- graph.tree(n=0,children=2)
@@ -213,7 +219,7 @@ for(i in 1:3){
   
   scales <- 0.5 + segmentation.tree$vertices[,4] / max(segmentation.tree$vertices[,4])
   
-  igraph.to.tikz(G, lay, scales, paste0("tikz/motivating_example_seg_tree",i, ".tex"))
+  igraph.to.tikz(G, lay, scales, paste0("tikz/illustrative_example_seg_tree",i, ".tex"))
 
   
 }

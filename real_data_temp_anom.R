@@ -9,7 +9,8 @@ source("R/misc.R")
 ###################### Temperature anomalies data set #################################
 #######################################################################################
 #**** download data
-tmp <- as.data.frame(fread("http://data.giss.nasa.gov/gistemp/tabledata_v3/GLB.Ts+dSST.csv", colClasses="character"))
+tmp <- as.data.frame(fread("http://data.giss.nasa.gov/gistemp/tabledata_v3/GLB.Ts+dSST.csv", 
+                           colClasses="character"))
 x <- as.numeric(t(tmp[,2:13]))
 x <- x[!is.na(x)]
 time <- seq(as.Date("1880/1/1"),by="month", length.out = length(x))
@@ -17,7 +18,7 @@ time <- seq(as.Date("1880/1/1"),by="month", length.out = length(x))
 set.seed(seed)
 #**** detect change-points with NOT SIC 
 system.time(w <- not(x, contrast = "pcwsLinContMean", M=50000))
-w.cpt <- features(w, penalty="sic")$cpt[[1]]
+w.cpt <- features(w, penalty="sic")$cpt
 
 #**** plot of the data and th fitted signal
 plot.data <- data.frame(time=time, x=x, fitted=predict(w), residuals=residuals(w))
