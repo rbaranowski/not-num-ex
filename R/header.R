@@ -21,4 +21,4 @@ seed <- 11111
 
 #***** Number of MC repetitions in the simulation study and the number of available cores
 mc <- 100
-n.cores <- 8
+n.cores <- 6

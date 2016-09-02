@@ -7,8 +7,8 @@ source("R/misc.R")
 source("R/methods.R")
 
 set.seed(seed)
-# models <- list(model.teeth, model.blocks, model.wave1, model.mix, model.vol, model.quad, model.wave2)
-models <- list(model.vol)
+models <- list(model.teeth, model.blocks, model.wave1, model.mix, model.vol, model.quad, model.wave2)
+#models <- list(model.vol)
 ## laplace sigma=1
 for(model in models) sim.function(model=model,
                                   mc=mc,
