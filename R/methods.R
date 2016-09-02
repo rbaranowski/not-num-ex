@@ -36,7 +36,7 @@ sim.methods[["pcwsConstMean"]] <- list(
     tic <- proc.time()
     
     object <- wbs(x)
-    cpts <- changepoints(object)$cpt.ic$ssic.penalty
+    cpts <- changepoints(object)$cpt.ic$ssic.penalty[[1]]
     toc <- proc.time()
     
     
